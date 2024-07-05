@@ -1,0 +1,166 @@
+CREATE TABLE Μάθημα (
+  Κωδικός INTEGER   NOT NULL ,
+  Τίτλος VARCHAR(30)    ,
+  Περιγραφή VARCHAR(30)      ,
+PRIMARY KEY(Κωδικός));
+
+
+
+
+CREATE TABLE Σχολή (
+  Κωδικός INTEGER   NOT NULL ,
+  Τηλέφωνο VARCHAR(10)    ,
+  Τίτλος VARCHAR(30)   NOT NULL ,
+  Πόλη VARCHAR    ,
+  TK VARCHAR(30)    ,
+  Οδός VARCHAR(30)    ,
+  Αριθμός VARCHAR(30)      ,
+PRIMARY KEY(Κωδικός));
+
+
+
+
+CREATE TABLE Καθηγητής (
+  Κωδικός INTEGER   NOT NULL ,
+  Επώνυμο VARCHAR(30)   NOT NULL ,
+  Όνομα VARCHAR(30)    ,
+  Ειδικότητα VARCHAR(30)    ,
+  Τηλέφωνο VARCHAR(10)    ,
+  Πόλη VARCHAR(30)    ,
+  ΤΚ VARCHAR(30)    ,
+  Οδός VARCHAR(30)    ,
+  Αριθμός VARCHAR(30)      ,
+PRIMARY KEY(Κωδικός));
+
+
+
+
+CREATE TABLE Υπάλληλος (
+  Κωδικός INTEGER   NOT NULL ,
+  Σχολή_Κωδικός INTEGER   NOT NULL ,
+  Επώνυμο VARCHAR(30)   NOT NULL ,
+  Όνομα VARCHAR(30)    ,
+  ΑΤ VARCHAR(30)    ,
+  ΑΦΜ VARCHAR(30)    ,
+  Θέση εργασίας VARCHAR(30)    ,
+  Τηλέφωνο VARCHAR(10)    ,
+  Πόλη VARCHAR(30)    ,
+  ΤΚ VARCHAR(30)    ,
+  Οδός VARCHAR(30)    ,
+  Αριθμός VARCHAR(30)    ,
+  Ημερομηνία πρόσληψης VARCHAR(30)      ,
+PRIMARY KEY(Κωδικός)  ,
+  FOREIGN KEY(Σχολή_Κωδικός)
+    REFERENCES Σχολή(Κωδικός));
+
+
+CREATE INDEX Υπάλληλος_FKIndex1 ON Υπάλληλος (Σχολή_Κωδικός);
+
+
+CREATE INDEX IFK_Απασχολείται ON Υπάλληλος (Σχολή_Κωδικός);
+
+
+CREATE TABLE Τμήμα (
+  Κωδικός INTEGER   NOT NULL ,
+  Σχολή_Κωδικός INTEGER   NOT NULL ,
+  Πλήθος μαθητών INTEGER    ,
+  Τίτλος VARCHAR(30)    ,
+  Αριθμός VARCHAR(30)      ,
+PRIMARY KEY(Κωδικός)  ,
+  FOREIGN KEY(Σχολή_Κωδικός)
+    REFERENCES Σχολή(Κωδικός));
+
+
+CREATE INDEX Τμήμα_FKIndex1 ON Τμήμα (Σχολή_Κωδικός);
+
+
+CREATE INDEX IFK_Ανήκει ON Τμήμα (Σχολή_Κωδικός);
+
+
+CREATE TABLE Μαθητής (
+  Κωδικός INTEGER   NOT NULL ,
+  Τμήμα_Κωδικός INTEGER   NOT NULL ,
+  Όνομα VARCHAR(30)    ,
+  Επώνυμο VARCHAR(30)   NOT NULL ,
+  Πατρώνυμο VARCHAR(30)    ,
+  Μητρώνυμο VARCHAR(30)    ,
+  Σταθερό τηλέφωνο VARCHAR(10)    ,
+  Ημερομηνία γέννησης VARCHAR(30)    ,
+  Αριθμός VARCHAR(30)    ,
+  Πόλη VARCHAR(30)    ,
+  ΤΚ VARCHAR(30)    ,
+  Οδός VARCHAR(30)    ,
+  Κινητό τηλέφωνο VARCHAR(10)    ,
+  Σύνολο απουσιών VARCHAR(30)      ,
+PRIMARY KEY(Κωδικός)  ,
+  FOREIGN KEY(Τμήμα_Κωδικός)
+    REFERENCES Τμήμα(Κωδικός));
+
+
+CREATE INDEX Μαθητής_FKIndex1 ON Μαθητής (Τμήμα_Κωδικός);
+
+
+CREATE INDEX IFK_Είναι στο ON Μαθητής (Τμήμα_Κωδικός);
+
+
+CREATE TABLE Βαθμολογία (
+  Μαθητής_Κωδικός INTEGER   NOT NULL ,
+  Μάθημα_Κωδικός INTEGER   NOT NULL ,
+  Βαθμός INTEGER      ,
+PRIMARY KEY(Μαθητής_Κωδικός, Μάθημα_Κωδικός)    ,
+  FOREIGN KEY(Μαθητής_Κωδικός)
+    REFERENCES Μαθητής(Κωδικός),
+  FOREIGN KEY(Μάθημα_Κωδικός)
+    REFERENCES Μάθημα(Κωδικός));
+
+
+CREATE INDEX Μαθητής_has_Μάθημα_FKIndex1 ON Βαθμολογία (Μαθητής_Κωδικός);
+CREATE INDEX Μαθητής_has_Μάθημα_FKIndex2 ON Βαθμολογία (Μάθημα_Κωδικός);
+
+
+CREATE INDEX IFK_Rel_06 ON Βαθμολογία (Μαθητής_Κωδικός);
+CREATE INDEX IFK_Rel_07 ON Βαθμολογία (Μάθημα_Κωδικός);
+
+
+CREATE TABLE Εργάζεται (
+  Σχολή_Κωδικός INTEGER   NOT NULL ,
+  Καθηγητής_Κωδικός INTEGER   NOT NULL ,
+  Ωράριο εργασίας VARCHAR(30)      ,
+PRIMARY KEY(Σχολή_Κωδικός, Καθηγητής_Κωδικός)    ,
+  FOREIGN KEY(Σχολή_Κωδικός)
+    REFERENCES Σχολή(Κωδικός),
+  FOREIGN KEY(Καθηγητής_Κωδικός)
+    REFERENCES Καθηγητής(Κωδικός));
+
+
+CREATE INDEX Σχολή_has_Καθηγητής_FKIndex1 ON Εργάζεται (Σχολή_Κωδικός);
+CREATE INDEX Σχολή_has_Καθηγητής_FKIndex2 ON Εργάζεται (Καθηγητής_Κωδικός);
+
+
+CREATE INDEX IFK_Rel_02 ON Εργάζεται (Σχολή_Κωδικός);
+CREATE INDEX IFK_Rel_03 ON Εργάζεται (Καθηγητής_Κωδικός);
+
+
+CREATE TABLE Παραδίδεται (
+  Καθηγητής_Κωδικός INTEGER   NOT NULL ,
+  Μάθημα_Κωδικός INTEGER   NOT NULL ,
+  Τμήμα_Κωδικός INTEGER   NOT NULL   ,
+PRIMARY KEY(Καθηγητής_Κωδικός, Μάθημα_Κωδικός)      ,
+  FOREIGN KEY(Καθηγητής_Κωδικός)
+    REFERENCES Καθηγητής(Κωδικός),
+  FOREIGN KEY(Μάθημα_Κωδικός)
+    REFERENCES Μάθημα(Κωδικός),
+  FOREIGN KEY(Τμήμα_Κωδικός)
+    REFERENCES Τμήμα(Κωδικός));
+
+
+CREATE INDEX Καθηγητής_has_Μάθημα_FKIndex1 ON Παραδίδεται (Καθηγητής_Κωδικός);
+CREATE INDEX Καθηγητής_has_Μάθημα_FKIndex2 ON Παραδίδεται (Μάθημα_Κωδικός);
+CREATE INDEX Παραδίδεται_FKIndex3 ON Παραδίδεται (Τμήμα_Κωδικός);
+
+
+CREATE INDEX IFK_Rel_08 ON Παραδίδεται (Καθηγητής_Κωδικός);
+CREATE INDEX IFK_Rel_09 ON Παραδίδεται (Μάθημα_Κωδικός);
+CREATE INDEX IFK_Rel_10 ON Παραδίδεται (Τμήμα_Κωδικός);
+
+
